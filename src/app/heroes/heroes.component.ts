@@ -7,7 +7,7 @@ import { HeroService } from '../hero.service';
   selector: 'app-heroes',
   templateUrl: './heroes.component.html',
   styleUrls: ['./heroes.component.css'],
-  encapsulation: ViewEncapsulation.None
+  //encapsulation: ViewEncapsulation.None
 })
 export class HeroesComponent implements OnInit {
   // selectedHero: Hero;
@@ -15,9 +15,19 @@ export class HeroesComponent implements OnInit {
 
   constructor(private heroService: HeroService) { }
 
-  // onSelect(hero: Hero): void {
-  //   this.selectedHero = hero;
-  // }
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      })
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero).subscribe();
+  }
 
   ngOnInit() {
     this.getHeroes();
